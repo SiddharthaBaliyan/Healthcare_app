@@ -91,3 +91,15 @@ Thumbs.db
 
 # Uploads
 frontend/uploads/
+
+# Local Development Scripts (unnecessary for repo)
+run_*.bat
+run_*.ps1
+
+# Development Documentation (local guides)
+GITHUB_SETUP.md
+DEPLOYMENT.md
+CHECKLIST.md
+VISUAL_GUIDE.md
+CI_CD_SUMMARY.md
+QUICK_START.md
