@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heart Disease Predictor - AI-Powered Medical Diagnosis</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Syne:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-gradient sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="/">
+                <i class="fas fa-heartbeat"></i> Heart Disease Predictor
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#prediction">Prediction</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#info">Information</a>
+                    </li>
+                    <li class="nav-item">
+                        <span class="badge bg-success ms-2" id="api-status">
+                            <i class="fas fa-circle"></i> API Connected
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row align-items-center min-vh-75">
+                <div class="col-lg-6">
+                    <h1 class="display-4 fw-bold mb-4 hero-title">
+                        <span class="gradient-text">Heart Disease Detection</span><br>
+                        Powered by AI
+                    </h1>
+                    <p class="lead text-muted mb-4">
+                        Get accurate predictions about heart disease risk using advanced machine learning algorithms. 
+                        Simply enter your medical parameters and receive instant insights.
+                    </p>
+                    <div class="d-flex gap-3">
+                        <a href="#prediction" class="btn btn-primary btn-lg">
+                            <i class="fas fa-heartbeat"></i> Start Prediction
+                        </a>
+                        <a href="#info" class="btn btn-outline-primary btn-lg">
+                            <i class="fas fa-info-circle"></i> Learn More
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="hero-image">
+                        <div class="heart-animation">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Prediction Section -->
+    <section id="prediction" class="prediction-section py-5">
+        <div class="container">
+            <h2 class="section-title mb-4">
+                <i class="fas fa-clipboard-check"></i> Patient Information Form
+            </h2>
+            
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="card prediction-card">
+                        <div class="card-body p-4">
+                            <form id="predictionForm">
+                                <div class="form-section">
+                                    <h5 class="mb-3">
+                                        <i class="fas fa-user"></i> Basic Information
+                                    </h5>
+                                    
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label for="Age" class="form-label">Age (years)</label>
+                                            <input type="number" class="form-control" id="Age" name="Age" min="1" max="150" required placeholder="e.g., 58">
+                                            <small class="form-text text-muted">Patient's age in years</small>
+                                        </div>
+                                        
+                                        <div class="col-md-6">
+                                            <label for="Sex" class="form-label">Sex</label>
+                                            <select class="form-select" id="Sex" name="Sex" required>
+                                                <option value="">Select...</option>
+                                                <option value="0">Female</option>
+                                                <option value="1">Male</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-section">
+                                    <h5 class="mb-3">
+                                        <i class="fas fa-stethoscope"></i> Clinical Parameters
+                                    </h5>
+                                    
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label for="Chest_pain_type" class="form-label">Chest Pain Type</label>
+                                            <select class="form-select" id="Chest_pain_type" name="Chest_pain_type" required>
+                                                <option value="">Select...</option>
+                                                <option value="1">Typical Angina</option>
+                                                <option value="2">Atypical Angina</option>
+                                                <option value="3">Non-anginal Pain</option>
+                                                <option value="4">Asymptomatic</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="col-md-6">
+                                            <label for="BP" class="form-label">Blood Pressure (mmHg)</label>
+                                            <input type="number" class="form-control" id="BP" name="BP" min="50" max="250" required placeholder="e.g., 152">
+                                            <small class="form-text text-muted">Resting blood pressure</small>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row g-3 mt-2">
+                                        <div class="col-md-6">
+                                            <label for="Cholesterol" class="form-label">Cholesterol (mg/dl)</label>
+                                            <input type="number" class="form-control" id="Cholesterol" name="Cholesterol" min="0" max="600" required placeholder="e.g., 239">
+                                        </div>
+                                        
+                                        <div class="col-md-6">
+                                            <label for="Max_HR" class="form-label">Max Heart Rate Achieved</label>
+                                            <input type="number" class="form-control" id="Max_HR" name="Max_HR" min="30" max="250" required placeholder="e.g., 158">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-section">
+                                    <h5 class="mb-3">
+                                        <i class="fas fa-heart-pulse"></i> Cardiac Indicators
+                                    </h5>
+                                    
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label for="EKG_results" class="form-label">EKG Results</label>
+                                            <select class="form-select" id="EKG_results" name="EKG_results" required>
+                                                <option value="">Select...</option>
+                                                <option value="0">Normal</option>
+                                                <option value="1">ST-T Abnormality</option>
+                                                <option value="2">LV Hypertrophy</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="col-md-6">
+                                            <label for="Exercise_angina" class="form-label">Exercise Induced Angina</label>
+                                            <select class="form-select" id="Exercise_angina" name="Exercise_angina" required>
+                                                <option value="">Select...</option>
+                                                <option value="0">No</option>
+                                                <option value="1">Yes</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row g-3 mt-2">
+                                        <div class="col-md-6">
+                                            <label for="ST_depression" class="form-label">ST Depression</label>
+                                            <input type="number" class="form-control" id="ST_depression" name="ST_depression" min="0" max="10" step="0.1" required placeholder="e.g., 3.6">
+                                            <small class="form-text text-muted">Induced by exercise relative to rest</small>
+                                        </div>
+                                        
+                                        <div class="col-md-6">
+                                            <label for="Slope_of_ST" class="form-label">Slope of ST Segment</label>
+                                            <select class="form-select" id="Slope_of_ST" name="Slope_of_ST" required>
+                                                <option value="">Select...</option>
+                                                <option value="1">Upsloping</option>
+                                                <option value="2">Flat</option>
+                                                <option value="3">Downsloping</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-section">
+                                    <h5 class="mb-3">
+                                        <i class="fas fa-flask"></i> Lab Values
+                                    </h5>
+                                    
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label for="FBS_over_120" class="form-label">Fasting Blood Sugar > 120</label>
+                                            <select class="form-select" id="FBS_over_120" name="FBS_over_120" required>
+                                                <option value="">Select...</option>
+                                                <option value="0">No</option>
+                                                <option value="1">Yes</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="col-md-6">
+                                            <label for="Number_of_vessels_fluro" class="form-label">Number of Major Vessels</label>
+                                            <select class="form-select" id="Number_of_vessels_fluro" name="Number_of_vessels_fluro" required>
+                                                <option value="">Select...</option>
+                                                <option value="0">0 vessels</option>
+                                                <option value="1">1 vessel</option>
+                                                <option value="2">2 vessels</option>
+                                                <option value="3">3 vessels</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row g-3 mt-2">
+                                        <div class="col-md-6">
+                                            <label for="Thallium" class="form-label">Thallium Value</label>
+                                            <select class="form-select" id="Thallium" name="Thallium" required>
+                                                <option value="">Select...</option>
+                                                <option value="3">3 - Normal</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                                <option value="6">6</option>
+                                                <option value="7">7 - High</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="d-grid gap-2 mt-4">
+                                    <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">
+                                        <i class="fas fa-magic"></i> Get Prediction
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Result Section -->
+            <div id="resultSection" class="mt-5" style="display: none;">
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+                        <div id="resultCard" class="result-card"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Information Section -->
+    <section id="info" class="info-section py-5 bg-light">
+        <div class="container">
+            <h2 class="section-title mb-4">
+                <i class="fas fa-lightbulb"></i> About This Predictor
+            </h2>
+            
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-3">
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <h5>AI-Powered</h5>
+                        <p>Machine learning model trained on thousands of patient records for accurate predictions</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-3">
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <h5>Instant Results</h5>
+                        <p>Get real-time predictions in seconds, no waiting time</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-3">
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <h5>Private & Secure</h5>
+                        <p>Your data is processed securely and never stored</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-3">
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h5>Accurate</h5>
+                        <p>88%+ accuracy rate based on comprehensive medical data</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-5">
+                <div class="col-lg-6">
+                    <h5>How It Works</h5>
+                    <ol class="custom-ol">
+                        <li>Enter your medical parameters in the form above</li>
+                        <li>Our AI model analyzes your data</li>
+                        <li>Receive instant prediction and confidence level</li>
+                        <li>Consult with healthcare professionals for final diagnosis</li>
+                    </ol>
+                    <div class="alert alert-warning mt-3">
+                        <i class="fas fa-exclamation-triangle"></i> <strong>Disclaimer:</strong> This tool is for educational purposes only and should not replace professional medical advice. Always consult a qualified healthcare provider.
+                    </div>
+                </div>
+                
+                <div class="col-lg-6">
+                    <h5>Model Performance</h5>
+                    <div class="metric-card">
+                        <div class="metric">
+                            <span class="metric-label">Accuracy</span>
+                            <span class="metric-value">88.14%</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Precision</span>
+                            <span class="metric-value">87.89%</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Recall</span>
+                            <span class="metric-value">88.39%</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">F1-Score</span>
+                            <span class="metric-value">88.14%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer py-4 bg-dark text-white">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="mb-0">
+                        <i class="fas fa-heartbeat"></i> Heart Disease Predictor v1.0
+                    </p>
+                    <small class="text-muted">Powered by FastAPI & Machine Learning</small>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="mb-0">
+                        <i class="fas fa-globe"></i> API Status: <span id="footer-api-status" class="badge bg-success">Connected</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
